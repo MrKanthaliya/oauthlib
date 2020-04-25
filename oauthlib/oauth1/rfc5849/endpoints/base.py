@@ -115,7 +115,7 @@ class BaseEndpoint:
         # The server SHOULD return a 400 (Bad Request) status code when
         # receiving a request with missing parameters.
         if not all((request.signature, request.client_key,
-                    request.nonce, request.timestamp,
+                    # request.nonce, request.timestamp,
                     request.signature_method)):
             raise errors.InvalidRequestError(
                 description='Missing mandatory OAuth parameters.')
@@ -146,26 +146,26 @@ class BaseEndpoint:
         # The timestamp value MUST be a positive integer. Unless otherwise
         # specified by the server's documentation, the timestamp is expressed
         # in the number of seconds since January 1, 1970 00:00:00 GMT.
-        if len(request.timestamp) != 10:
-            raise errors.InvalidRequestError(
-                description='Invalid timestamp size')
+        # if len(request.timestamp) != 10:
+        #     raise errors.InvalidRequestError(
+        #         description='Invalid timestamp size')
 
-        try:
-            ts = int(request.timestamp)
+        # try:
+        #     ts = int(request.timestamp)
 
-        except ValueError:
-            raise errors.InvalidRequestError(
-                description='Timestamp must be an integer.')
+        # except ValueError:
+        #     raise errors.InvalidRequestError(
+        #         description='Timestamp must be an integer.')
 
-        else:
-            # To avoid the need to retain an infinite number of nonce values for
-            # future checks, servers MAY choose to restrict the time period after
-            # which a request with an old timestamp is rejected.
-            if abs(time.time() - ts) > self.request_validator.timestamp_lifetime:
-                raise errors.InvalidRequestError(
-                    description=('Timestamp given is invalid, differ from '
-                                 'allowed by over %s seconds.' % (
-                                     self.request_validator.timestamp_lifetime)))
+        # else:
+        #     # To avoid the need to retain an infinite number of nonce values for
+        #     # future checks, servers MAY choose to restrict the time period after
+        #     # which a request with an old timestamp is rejected.
+        #     if abs(time.time() - ts) > self.request_validator.timestamp_lifetime:
+        #         raise errors.InvalidRequestError(
+        #             description=('Timestamp given is invalid, differ from '
+        #                          'allowed by over %s seconds.' % (
+        #                              self.request_validator.timestamp_lifetime)))
 
         # Provider specific validation of parameters, used to enforce
         # restrictions such as character set and length.
@@ -173,9 +173,9 @@ class BaseEndpoint:
             raise errors.InvalidRequestError(
                 description='Invalid client key format.')
 
-        if not self.request_validator.check_nonce(request.nonce):
-            raise errors.InvalidRequestError(
-                description='Invalid nonce format.')
+        # if not self.request_validator.check_nonce(request.nonce):
+        #     raise errors.InvalidRequestError(
+        #         description='Invalid nonce format.')
 
     def _check_signature(self, request, is_token_request=False):
         # ---- RSA Signature verification ----
